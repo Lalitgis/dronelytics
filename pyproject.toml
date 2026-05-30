@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dronelytics"
+version = "1.0.1"
+description = "Comprehensive Python package for drone orthomosaic analysis and agricultural field phenotyping"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+
+authors = [
+    {name = "Lalit BC", email = "your_email@example.com"}
+]
+
+dependencies = [
+    "numpy",
+    "rasterio",
+    "matplotlib",
+    "scipy",
+    "pandas"
+]
+
+[project.optional-dependencies]
+pointcloud = [
+    "laspy",
+    "pyvista"
+]
