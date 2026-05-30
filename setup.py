@@ -28,8 +28,8 @@ extras_require = {
 
 setup(
     name='dronelytics',
-    version='1.0.0',
-    author='Research Development',
+    version='1.0.1',
+    author='Lalit BC',
     author_email='lalitiaas@gmail.com',
     description='Comprehensive drone orthomosaic analysis and agricultural field phenotyping',
     long_description=long_description,
