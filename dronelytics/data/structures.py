@@ -16,20 +16,26 @@ class VegetationIndexData:
 @dataclass
 class SegmentationResult:
     labels: np.ndarray
-    num_plots: int
-    boundaries: list
+    num_features: int
+    metadata: Dict[str, Any]
 
 @dataclass
 class ExtractionResult:
-    pixels: list
-    plot_stats: Dict[str, Any]
+    data: np.ndarray
+    mask: np.ndarray
+    metadata: Dict[str, Any]
 
 @dataclass
 class PointCloudMetadata:
     filepath: str
     num_points: int
-    bounds: Dict[str, tuple]
-    classification_counts: Dict
+    x_min: float
+    x_max: float
+    y_min: float
+    y_max: float
+    z_min: float
+    z_max: float
+    las_version: str
 
 @dataclass
 class ThreeDModel:

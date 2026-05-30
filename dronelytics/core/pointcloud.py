@@ -45,7 +45,8 @@ class PointCloudProcessor:
             self.las = laspy.read(str(self.filepath))
             self.points = np.vstack((self.las.x, self.las.y, self.las.z)).transpose()
             self.metadata = PointCloudMetadata(
-                point_count=len(self.points),
+                filepath=str(self.filepath),
+                num_points=len(self.points),
                 x_min=float(self.las.x.min()),
                 x_max=float(self.las.x.max()),
                 y_min=float(self.las.y.min()),
@@ -185,15 +186,108 @@ class PointCloudProcessor:
             logger.info("Generating 3D surface mesh")
 
             cloud = pv.PolyData(self.points)
-
             surface = cloud.delaunay_2d(alpha=50.0)
 
             logger.info(f"Mesh generated with {surface.n_cells} cells and {surface.n_points} points")
 
-            return ThreeDModel(surface, self.points, 'delaunay')
+            # Extract vertices and faces
+            vertices = surface.points
+            faces = surface.faces.reshape(-1, 4)[:, 1:]  # Remove cell size counter
+
+            # Calculate height range
+            height_range = (float(self.metadata.z_min), float(self.metadata.z_max))
+
+            model_metadata = {
+                'num_cells': surface.n_cells,
+                'num_points': surface.n_points,
+                'bounds': {
+                    'x': (self.metadata.x_min, self.metadata.x_max),
+                    'y': (self.metadata.y_min, self.metadata.y_max),
+                    'z': (self.metadata.z_min, self.metadata.z_max)
+                }
+            }
+
+            return ThreeDModel(
+                mesh=surface,
+                vertices=vertices,
+                faces=faces,
+                model_type='delaunay',
+                height_range=height_range,
+                metadata=model_metadata
+            )
 
         except Exception as e:
             logger.error(f"Mesh generation failed: {e}")
+            raise
+
+    def create_3d_mesh(self):
+        """Alias for generate_mesh()."""
+        return self.generate_mesh()
+
+    def generate_dem(self):
+        """Generate Digital Elevation Model (alias for DTM)."""
+        return self.generate_dtm()
+
+    def export_dem_as_tiff(self, dem_array, filepath, cell_size=1.0):
+        """Export DEM as GeoTIFF file.
+
+        Parameters
+        ----------
+        dem_array : np.ndarray
+            DEM array
+        filepath : str
+            Output file path
+        cell_size : float
+            Cell size in meters
+        """
+        try:
+            import rasterio
+            from rasterio.transform import Affine
+
+            logger.info(f"Exporting DEM to {filepath}")
+
+            # Create geotransform
+            transform = Affine.translation(self.metadata.x_min, self.metadata.y_max) * Affine.scale(cell_size, -cell_size)
+
+            # Write GeoTIFF
+            with rasterio.open(
+                filepath, 'w',
+                driver='GTiff',
+                height=dem_array.shape[0],
+                width=dem_array.shape[1],
+                count=1,
+                dtype=dem_array.dtype,
+                transform=transform
+            ) as dst:
+                dst.write(dem_array, 1)
+
+            logger.info(f"DEM exported successfully to {filepath}")
+
+        except Exception as e:
+            logger.error(f"DEM export failed: {e}")
+            raise
+
+    def export_mesh_as_stl(self, mesh, filepath):
+        """Export 3D mesh as STL file.
+
+        Parameters
+        ----------
+        mesh : pyvista mesh
+            Mesh object
+        filepath : str
+            Output file path
+        """
+        try:
+            logger.info(f"Exporting mesh to {filepath}")
+
+            if not PYVISTA_AVAILABLE:
+                raise ImportError("pyvista is required for STL export. Install with: pip install dronelytics[pointcloud]")
+
+            mesh.save(filepath)
+            logger.info(f"Mesh exported successfully to {filepath}")
+
+        except Exception as e:
+            logger.error(f"Mesh export failed: {e}")
             raise
 
     def get_metadata(self):

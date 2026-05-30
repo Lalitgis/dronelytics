@@ -34,13 +34,13 @@ class TestVegetationIndices(unittest.TestCase):
         epsilon = 1e-10
         result = np.divide(numerator, denominator + epsilon, where=denominator != 0)
 
-        self.assertEqual(result[0], 0.5)
+        self.assertAlmostEqual(result[0], 0.5, places=5)
         self.assertTrue(np.isfinite(result[0]))
 
     def test_value_range(self):
         """Test that vegetation indices stay within expected ranges."""
-        nir = np.random.rand(self.test_shape) * 0.5 + 0.3
-        red = np.random.rand(self.test_shape) * 0.3 + 0.1
+        nir = np.random.rand(*self.test_shape) * 0.5 + 0.3
+        red = np.random.rand(*self.test_shape) * 0.3 + 0.1
 
         ndvi = (nir - red) / (nir + red + 1e-10)
 

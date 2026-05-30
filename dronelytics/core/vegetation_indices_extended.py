@@ -18,7 +18,7 @@ class VegetationIndicesExtended:
 
     def _safe_divide(self, numerator, denominator):
         """Safely divide avoiding division by zero."""
-        epsilon = max(1e-10, np.abs(denominator).max() * 1e-12)
+        epsilon = 1e-10 + np.abs(denominator).max() * 1e-12
         return np.divide(numerator, denominator + epsilon, where=denominator != 0)
 
     def _check_bands(self, required_bands):
@@ -122,6 +122,16 @@ class VegetationIndicesExtended:
         self.results['osavi'] = VegetationIndexData('OSAVI', osavi, osavi.mean(), osavi.std(), osavi.min(), osavi.max(), osavi.size)
         return self.results['osavi']
 
+    def evi(self, G=2.5, C1=6.0, C2=7.5, L=1.0):
+        """Enhanced Vegetation Index."""
+        self._check_bands(['red', 'nir', 'blue'])
+        nir = self.ortho.get_band('nir')
+        red = self.ortho.get_band('red')
+        blue = self.ortho.get_band('blue')
+        evi = G * self._safe_divide(nir - red, nir + C1 * red - C2 * blue + L)
+        self.results['evi'] = VegetationIndexData('EVI', evi, evi.mean(), evi.std(), evi.min(), evi.max(), evi.size)
+        return self.results['evi']
+
     def custom(self, formula_func: Callable, name: str, description: str = None, value_range: Tuple = (-1, 1)):
         """Calculate custom vegetation index using user formula."""
         try:
@@ -136,6 +146,23 @@ class VegetationIndicesExtended:
             logger.error(f"Custom index failed: {e}")
             raise
 
+    # Alias methods for consistency with documentation
+    def calculate_ndvi(self):
+        """Alias for ndvi()."""
+        return self.ndvi()
+
+    def calculate_ndre(self):
+        """Alias for ndre()."""
+        return self.ndre()
+
+    def calculate_gndvi(self):
+        """Alias for gndvi()."""
+        return self.gndvi()
+
+    def calculate_evi(self):
+        """Alias for evi()."""
+        return self.evi()
+
     def calculate_all(self):
         """Calculate all available indices."""
         indices = [
@@ -148,6 +175,7 @@ class VegetationIndicesExtended:
             ('arvi', self.arvi),
             ('cvi', self.cvi),
             ('osavi', self.osavi),
+            ('evi', self.evi),
         ]
 
         for name, func in indices:
