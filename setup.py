@@ -10,11 +10,15 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        "numpy",
-        "rasterio",
-        "matplotlib",
-        "scipy",
-        "pandas",
+    "numpy",
+    "rasterio",
+    "matplotlib",
+    "scipy",
+    "pandas",
+    "scikit-image",  
+    "geopandas",     
+    "shapely",       
+    "openpyxl",      
     ],
     extras_require={
         "pointcloud": [
