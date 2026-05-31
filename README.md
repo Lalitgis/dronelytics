@@ -123,7 +123,7 @@ If you use Dronelytics in research:
 BC, L. (2026).
 Dronelytics: Comprehensive Drone Orthomosaic Analysis
 and Agricultural Field Phenotyping Toolkit.
-Version 1.0.0.
+Version 1.0.3.
 
 # Contributing
 
