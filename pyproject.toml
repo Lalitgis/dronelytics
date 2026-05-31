@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dronelytics"
-version = "1.0.1"
+version = "1.0.3"
 description = "Comprehensive Python package for drone orthomosaic analysis and agricultural field phenotyping"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -19,7 +19,11 @@ dependencies = [
     "rasterio",
     "matplotlib",
     "scipy",
-    "pandas"
+    "pandas",
+    "scikit-image",      
+    "geopandas",        
+    "shapely",           
+    "openpyxl"
 ]
 
 [project.optional-dependencies]
