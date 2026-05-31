@@ -116,16 +116,6 @@ Optional point cloud support:
 ```bash
 pip install dronelytics[pointcloud]
 ```
-
-# Documentation
-
-Guide	Description
-WORKFLOW.md	Complete workflow
-VISUALIZATION_GUIDE.md	Visualization examples
-5BAND_SUPPORT_GUIDE.md	Red-edge workflows
-COMPLETE_FEATURE_SUMMARY.md	Full capabilities
-DEPLOYMENT_CHECKLIST.md	Production deployment
-
 # Citation
 
 If you use Dronelytics in research:
