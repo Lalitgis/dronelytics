@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="dronelytics",
-    version="1.0.3",
+    version="1.0.4",
     author="Lalit BC",
     description="Drone orthomosaic analysis and agricultural phenotyping",
     long_description=open("README.md", encoding="utf-8").read(),
