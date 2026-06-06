@@ -38,10 +38,10 @@ class VegetationIndicesExtended:
 
     def ndre(self):
         """Normalized Difference Red-Edge (5-band only)."""
-        self._check_bands(['nir', 'rededge'])
+        self._check_bands(['nir', 'red_edge'])
         nir = self.ortho.get_band('nir')
-        rededge = self.ortho.get_band('rededge')
-        ndre = self._safe_divide(nir - rededge, nir + rededge)
+        red_edge = self.ortho.get_band('red_edge')
+        ndre = self._safe_divide(nir - red_edge, nir + red_edge)
         self.results['ndre'] = VegetationIndexData('NDRE', ndre, ndre.mean(), ndre.std(), ndre.min(), ndre.max(), ndre.size)
         return self.results['ndre']
 
