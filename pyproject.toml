@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dronelytics"
-version = "1.0.3"
+version = "1.0.4"
 description = "Comprehensive Python package for drone orthomosaic analysis and agricultural field phenotyping"
 readme = "README.md"
 requires-python = ">=3.8"
