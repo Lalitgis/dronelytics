@@ -27,6 +27,7 @@ class Orthomosaic:
             raise FileNotFoundError(f"File not found: {filepath}")
 
         self.band_config = band_config or {}
+        self._validate_band_config()
         self.data = None
         self.metadata = {}
         self._load()
