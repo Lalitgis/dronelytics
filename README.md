@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <strong>Drone Orthomosaic Analysis and Agricultural Field Phenotyping in Python</strong>
+  <strong>Drone Orthomosaic Analysis and Agricultural Field Phenotyping in Python environment</strong>
 </p>
 
 <p align="center">
